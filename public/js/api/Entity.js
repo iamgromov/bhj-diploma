@@ -15,13 +15,7 @@ class Entity {
       url: this.URL,
       method: 'GET',
       data: data,
-      callback: (err, response) => {
-        if (response && response.success === true) {
-          callback(null, response);
-        } else if (response && response.success === false) {
-          callback(response, null);
-        }
-      }
+      callback,
     });
   }
 
@@ -35,13 +29,7 @@ class Entity {
       url: this.URL,
       method: 'PUT',
       data: data,
-      callback: (err, response) => {
-        if (response && response.success) {
-          callback(null, response);
-        } else if (response && response.err) {
-          callback(err, null);
-        }
-      }
+      callback,
     });
   }
 
@@ -54,13 +42,7 @@ class Entity {
       url: this.URL,
       method: 'DELETE',
       data: data,
-      callback: (err, response) => {
-        if (response) {
-          callback(null, response);
-        } else {
-          callback(err, null);
-        }
-      }
+      callback,
     });
   }
 }

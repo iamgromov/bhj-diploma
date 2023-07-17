@@ -4,29 +4,33 @@
  * */
 const createRequest = (options = {}) => {
     const xhr = new XMLHttpRequest();
-    const formData = new FormData();
-
     xhr.responseType = 'json';
-    xhr.open(options.method, options.url);
+    let path = `http://localhost:8000${options.url}`;
 
-    xhr.onload = () => {
-        if (xhr.status === 200) {
-            options.callback(null, xhr.response);
-        } else {
-            options.callback(xhr.response, null);
+    if (options.method === 'GET') {
+        if (options.data) {
+          path = `${path}?`;
+          for (let key in options.data) {
+            path = `${path}${key}=${options.data[key]}&`;
+          }
+          path = path.slice(0, path.length);
         }
+        xhr.open(options.method, path);
+        xhr.send();
+    } else {
+        const formData = new FormData();
+        for (let key in options.data) {
+          formData.append(key, options.data[key]);
+        }
+        xhr.open(options.method, path);
+        xhr.send(formData);
     }
 
     xhr.onerror = () => {
         options.callback(new Error(xhr.statusText), null);
     }
 
-    if (options.method === 'GET') {
-        xhr.send();
-    } else {
-        for (let key in options.data) {
-            formData.append(key, options.data[key]);
-        }
-        xhr.send(formData);
+    xhr.onload = () => {
+        options.callback(err, xhr.response);
     }
 };
