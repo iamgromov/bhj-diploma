@@ -5,25 +5,27 @@
 const createRequest = (options = {}) => {
     const xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
-    let path = `http://localhost:8000${options.url}`;
 
-    if (options.method === 'GET') {
-        if (options.data) {
-          path = `${path}?`;
-          for (let key in options.data) {
-            path = `${path}${key}=${options.data[key]}&`;
-          }
-          path = path.slice(0, path.length);
+    if (options.data && options.method === 'GET') {
+      options.url += '?';
+      for(let key in options.data) {
+        if(options.data[key]) {
+          options.url += `${key}=${options.data[key]}&`
         }
-        xhr.open(options.method, path);
-        xhr.send();
+      }
+      options.url = options.url.slice(0, -1);
+
+      xhr.open(options.method, options.url);
+      xhr.send();
     } else {
-        const formData = new FormData();
-        for (let key in options.data) {
-          formData.append(key, options.data[key]);
-        }
-        xhr.open(options.method, path);
-        xhr.send(formData);
+      const formData = new FormData();
+
+      for (let key in options.data) {
+        formData.append(key, options.data[key]);
+      }
+
+      xhr.open(options.method, options.url);
+      xhr.send(formData);
     }
 
     xhr.onerror = () => {
@@ -31,6 +33,6 @@ const createRequest = (options = {}) => {
     }
 
     xhr.onload = () => {
-        options.callback(err, xhr.response);
+      options.callback(null, xhr.response);
     }
 };

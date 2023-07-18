@@ -14,7 +14,7 @@ class Entity {
     createRequest({
       url: this.URL,
       method: 'GET',
-      data: data,
+      data,
       callback,
     });
   }
@@ -28,7 +28,7 @@ class Entity {
     createRequest({
       url: this.URL,
       method: 'PUT',
-      data: data,
+      data,
       callback,
     });
   }
@@ -41,7 +41,7 @@ class Entity {
     createRequest({
       url: this.URL,
       method: 'DELETE',
-      data: data,
+      data,
       callback,
     });
   }
